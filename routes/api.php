@@ -14,6 +14,7 @@
 // return $request->user();
 // });
 
+use App\Http\Controllers\Admin\ApprovalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -45,3 +46,28 @@ Route::middleware([
 
     Route::get('/me', [AuthController::class, 'me']);
 });
+
+
+
+Route::middleware([
+    'auth:sanctum',
+    'role:admin'
+])
+    ->prefix('admin')
+    ->group(function () {
+
+        Route::get(
+            '/approval-requests',
+            [ApprovalController::class, 'getpendingstatus']
+        );
+
+        Route::get(
+            '/approval-request/{user}',
+            [ApprovalController::class, 'show_one_approval']
+        );
+
+        Route::post(
+            '/approval-request/update_status/{user}',
+            [ApprovalController::class, 'updateStatus']
+        );
+    });
