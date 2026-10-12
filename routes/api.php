@@ -15,6 +15,7 @@
 // });
 
 use App\Http\Controllers\admin\Admindashboardcontroller;
+use App\Http\Controllers\admin\AdminDashboardController as AdminAdminDashboardController;
 use App\Http\Controllers\Admin\ApprovalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -73,6 +74,6 @@ Route::middleware([
         );
         Route::get(
             '/state/dashboard',
-            [Admindashboardcontroller::class, 'state']
+            [AdminAdminDashboardController::class, 'stats']
         );
     });

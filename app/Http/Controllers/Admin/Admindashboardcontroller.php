@@ -7,9 +7,9 @@ use App\Models\User;
 
 // use Illuminate\Http\Request;
 
-class Admindashboardcontroller extends Controller
+class AdminDashboardController extends Controller
 {
-    public function state()
+    public function stats()
     {
         $totalAccounts = User::count();
         $totalDoctors = User::whereHas('role', function ($query) {
