@@ -14,6 +14,7 @@
 // return $request->user();
 // });
 
+use App\Http\Controllers\admin\Admindashboardcontroller;
 use App\Http\Controllers\Admin\ApprovalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -69,5 +70,9 @@ Route::middleware([
         Route::post(
             '/approval-request/update_status/{user}',
             [ApprovalController::class, 'updateStatus']
+        );
+        Route::get(
+            '/state/dashboard',
+            [Admindashboardcontroller::class, 'state']
         );
     });

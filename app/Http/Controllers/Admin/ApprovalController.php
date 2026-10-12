@@ -49,7 +49,7 @@ class ApprovalController extends Controller
                     $user->unsetRelation('doctorProfile');
                 }
             });
-        if (!$users) {
+        if ($users->isEmpty()) {
             return response()->json([
                 'message' => 'No pending approval requests found.'
             ], 404);
@@ -110,13 +110,17 @@ class ApprovalController extends Controller
                     User::APPROVAL_REJECTED,
                 ])
             ],
+            "cause_of_rejection" => [
+                Rule::requiredIf(function () use ($request) {
+                    return $request->input('approval_status') === User::APPROVAL_REJECTED;
+                }),
+                'nullable',
+                'string',
+                'max:255'
+            ]
         ]);
 
-        $user->load('role')->each(function ($user) {
-            if ($user->role?->name === 'receptionist') {
-                $user->unsetRelation('doctorProfile');
-            }
-        });
+        $user->load('role');
 
         if (!$this->isApprovableRole($user)) {
             return response()->json([
@@ -129,6 +133,7 @@ class ApprovalController extends Controller
                 'message' => 'This approval request has already been processed.'
             ], 409);
         }
+
 
         $user->update([
             'approval_status' => $validated['approval_status']
@@ -149,7 +154,8 @@ class ApprovalController extends Controller
                         ->subject('account approval status');
                 });
             } else {
-                Mail::raw('your account has been rejected please recreate your account.. for more information best regards', function ($message) use ($user) {
+                User::where('id', $user->id)->delete();
+                Mail::raw("your account has been rejected please recreate your account.. for more information : {$validated['cause_of_rejection']}", function ($message) use ($user) {
                     $message->to($user->email)
                         ->subject('account approval status');
                 });
