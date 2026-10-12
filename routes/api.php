@@ -73,7 +73,7 @@ Route::middleware([
             [ApprovalController::class, 'updateStatus']
         );
         Route::get(
-            '/state/dashboard',
+            '/stats/dashboard',
             [AdminAdminDashboardController::class, 'stats']
         );
     });
