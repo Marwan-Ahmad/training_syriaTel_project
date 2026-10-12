@@ -22,6 +22,18 @@ use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+
+/*
+        |--------------------------------------------------------------------------
+        | Department Management
+        |--------------------------------------------------------------------------
+        */
+
+Route::get(
+    '/departments/getdepartments',
+    [DepartmentManagementController::class, 'getdepartments']
+);
+
 Route::post(
     '/register/patient',
     [AuthController::class, 'registerPatient']
@@ -91,28 +103,17 @@ Route::middleware([
         );
 
         Route::get(
-            '/users/{user}',
+            '/getoneuser/{user}',
             [UserManagementController::class, 'show']
         );
 
         Route::put(
-            '/users/{user}',
+            '/updateuser/{user}',
             [UserManagementController::class, 'update']
         );
 
         Route::delete(
-            '/users/{user}',
+            '/deleteuser/{user}',
             [UserManagementController::class, 'destroy']
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Department Management
-        |--------------------------------------------------------------------------
-        */
-        Route::get(
-            '/departments/getdepartments',
-            [DepartmentManagementController::class, 'getdepartments']
         );
     });

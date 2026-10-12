@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -18,13 +20,27 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     */
+
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        // معالجة خطأ عدم وجود الموديل (Route Model Binding)
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if ($request->expectsJson() || $request->is('admin/*')) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Not Found - The requested resource does not exist.'
+                ], 404);
+            }
+        });
+
+        // معالجة خطأ الرابط أو الـ NotFound بشكل عام
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->expectsJson() || $request->is('admin/*')) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Not Found - The requested resource does not exist.'
+                ], 404);
+            }
         });
     }
 }

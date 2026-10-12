@@ -95,6 +95,18 @@ class UserManagementController extends Controller
 
     public function show(User $user)
     {
+        if (auth()->id() === $user->id) {
+            return response()->json([
+                'message' => 'You cannot view your own account.'
+            ], 422);
+        }
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found.'
+            ], 404);
+        }
+
         $user->load([
             'role:id,name',
             'patientProfile',

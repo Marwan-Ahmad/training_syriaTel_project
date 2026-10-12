@@ -34,6 +34,4 @@ class DepartmentManagementController extends Controller
             'departments' => $departments
         ], 200);
     }
-
-    // public getdep
 }
