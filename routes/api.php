@@ -17,6 +17,8 @@
 // use App\Http\Controllers\admin\Admindashboardcontroller;
 use App\Http\Controllers\admin\AdminDashboardController;
 use App\Http\Controllers\Admin\ApprovalController;
+use App\Http\Controllers\Admin\DepartmentManagementController;
+use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -75,5 +77,42 @@ Route::middleware([
         Route::get(
             '/stats/dashboard',
             [AdminDashboardController::class, 'stats']
+        );
+
+        /*
+    |--------------------------------------------------------------------------
+    | User Management
+    |--------------------------------------------------------------------------
+    */
+
+        Route::get(
+            '/users',
+            [UserManagementController::class, 'index']
+        );
+
+        Route::get(
+            '/users/{user}',
+            [UserManagementController::class, 'show']
+        );
+
+        Route::put(
+            '/users/{user}',
+            [UserManagementController::class, 'update']
+        );
+
+        Route::delete(
+            '/users/{user}',
+            [UserManagementController::class, 'destroy']
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Department Management
+        |--------------------------------------------------------------------------
+        */
+        Route::get(
+            '/departments/getdepartments',
+            [DepartmentManagementController::class, 'getdepartments']
         );
     });
