@@ -24,10 +24,10 @@ use App\Http\Controllers\AuthController;
 
 
 /*
-        |--------------------------------------------------------------------------
-        | Department Management
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| Department Management
+|--------------------------------------------------------------------------
+*/
 
 Route::get(
     '/departments/getdepartments',
@@ -107,7 +107,7 @@ Route::middleware([
             [UserManagementController::class, 'show']
         );
 
-        Route::put(
+        Route::post(
             '/updateuser/{user}',
             [UserManagementController::class, 'update']
         );

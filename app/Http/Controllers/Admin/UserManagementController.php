@@ -135,31 +135,43 @@ class UserManagementController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $validated = $request->validate([
+        $validated = $request->validate(
+            [
 
-            'full_name' => [
-                'sometimes',
-                'required',
-                'string',
-                'max:150'
+                'full_name' => [
+                    'sometimes',
+                    'required',
+                    'string',
+                    'max:150'
+                ],
+
+                'email' => [
+                    'sometimes',
+                    'required',
+                    'email',
+                    'max:150',
+
+                    Rule::unique('users', 'email')
+                        ->ignore($user->id)
+                ],
+
+                'phone' => [
+                    'nullable',
+                    'string',
+                    'between:10,10'
+                ],
             ],
+            [
 
-            'email' => [
-                'sometimes',
-                'required',
-                'email',
-                'max:150',
+                "between" => "The :attribute must be exactly 10 digits."
+            ]
+        );
 
-                Rule::unique('users', 'email')
-                    ->ignore($user->id)
-            ],
-
-            'phone' => [
-                'nullable',
-                'string',
-                'max:30'
-            ],
-        ]);
+        if (auth()->id() === $user->id) {
+            return response()->json([
+                'message' => 'You cannot update your own account go to profile settings.'
+            ], 422);
+        }
 
         $user->update($validated);
 
